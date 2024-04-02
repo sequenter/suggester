@@ -2,15 +2,15 @@
 	import type { Char, TileType } from '$constants/types';
 	import { LetterStore, TileStore } from '$lib/stores/letter.store';
 	import { clsx } from 'clsx';
-	import { onMount } from 'svelte';
 
 	export let index: number;
 	export let row: number;
 	export let type: TileType;
 
-	let isActive: boolean;
 	let container: HTMLButtonElement;
-	let letter: Char | undefined = undefined;
+
+	let isActive = index === 0 && row === 0 && type === 'green';
+	let letter: Char = undefined;
 
 	LetterStore.subscribe((val) => {
 		if (type === 'green') {
@@ -31,10 +31,6 @@
 		isActive = true;
 		TileStore.set({ index, row, type });
 	};
-
-	onMount(() => {
-		isActive = index === 0 && row === 0 && type === 'green';
-	});
 </script>
 
 <svelte:window on:click={onWindowClick} />

@@ -84,10 +84,10 @@
 	class={clsx(
 		'h-14 p-5 text-sm font-bold uppercase rounded',
 		(green || yellow || grey) && 'text-white',
+		!green && !yellow && !grey && 'bg-slate-200 hocus:bg-slate-300',
 		grey && 'bg-slate-800 opacity-40',
 		green && 'bg-green-500',
-		yellow && 'bg-yellow-500',
-		!green && !yellow && !grey && 'bg-slate-200 hocus:bg-slate-300'
+		yellow && 'bg-yellow-500'
 	)}
 	disabled={grey}
 	use:press={{ triggerBeforeFinished: true }}
