@@ -20,6 +20,7 @@ export const WORDS: string[] = [
 	'adage',
 	'adapt',
 	'adept',
+	'adieu',
 	'admin',
 	'admit',
 	'adobe',

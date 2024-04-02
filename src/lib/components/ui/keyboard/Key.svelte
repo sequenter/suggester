@@ -26,6 +26,7 @@
 
 		if ($TileStore.type === 'green') {
 			$LetterStore.green[$TileStore.index] = key;
+            console.log($LetterStore.green);
 
 			for (let i = 0; i < 5; i++) {
 				$LetterStore.yellow[i][$TileStore.index] =
@@ -66,12 +67,12 @@
 
 <button
 	class={clsx(
-		'h-14 p-5 bg-slate-200 text-sm font-bold uppercase rounded',
+		'h-14 p-5 text-sm font-bold uppercase rounded',
 		(green || yellow || grey) && 'text-white',
 		grey && 'bg-slate-800 opacity-40',
 		green && 'bg-green-500',
 		yellow && 'bg-yellow-500',
-		!green && !yellow && !grey && 'hocus:bg-slate-300'
+		!green && !yellow && !grey && 'bg-slate-200 hocus:bg-slate-300'
 	)}
 	disabled={grey}
 	use:press={{ triggerBeforeFinished: true }}
