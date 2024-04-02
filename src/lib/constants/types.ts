@@ -25,6 +25,8 @@ export type Char =
 	| 'X'
 	| 'Y'
 	| 'Z'
+	| 'ENTER'
+	| 'DELETE'
 	| undefined;
 
 export type CharArr = [Char, Char, Char, Char, Char];

@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { Char } from '$constants/types';
+	import type { Char, CharArr } from '$constants/types';
 	import { LetterStore, PressedLetterStore, TileStore } from '$lib/stores/letter.store';
 	import { clsx } from 'clsx';
 	import { press } from 'svelte-gestures';
 
-	export let key: Char | 'ENTER' | 'DEL';
+	export let key: Char;
+	export let onEnter: () => void;
 
 	let green = false;
 	let yellow = false;
@@ -15,18 +16,57 @@
 		yellow = val.yellow.some((row) => row.includes(key));
 	});
 
-	const onPress = () => {
-		if (key != 'ENTER' && key != 'DEL') {
-			setGrey();
+	const onClick = () => {
+		switch (key) {
+			case 'ENTER':
+				onEnter();
+				break;
+			case 'DELETE':
+				onDelete();
+				break;
+			default:
+				onKey();
 		}
 	};
 
-	const onClick = () => {
+	const onPress = () => {
+		if (key != 'ENTER' && key != 'DELETE') {
+			grey = !grey;
+
+			if (grey) {
+				yellow = false;
+				green = false;
+
+				$LetterStore.grey = [...$LetterStore.grey, key];
+
+				//Clear green
+				$LetterStore.green = $LetterStore.green.map((v) => (v === key ? undefined : v)) as CharArr;
+
+				//Clear yellow
+				for (let i = 0; i < $LetterStore.yellow.length; i++) {
+					$LetterStore.yellow[i] = $LetterStore.yellow[i].map((v) =>
+						v === key ? undefined : v
+					) as CharArr;
+				}
+			} else {
+				$LetterStore.grey = $LetterStore.grey.filter((item) => item != key);
+			}
+		}
+	};
+
+	const onDelete = () => {
+		if ($TileStore.type === 'green') {
+			$LetterStore.green[$TileStore.index] = undefined;
+		} else if ($TileStore.type === 'yellow') {
+			$LetterStore.yellow[$TileStore.row][$TileStore.index] = undefined;
+		}
+	};
+
+	const onKey = () => {
 		PressedLetterStore.set({ letter: key });
 
 		if ($TileStore.type === 'green') {
 			$LetterStore.green[$TileStore.index] = key;
-            console.log($LetterStore.green);
 
 			for (let i = 0; i < 5; i++) {
 				$LetterStore.yellow[i][$TileStore.index] =
@@ -36,31 +76,6 @@
 			}
 		} else if ($TileStore.type === 'yellow') {
 			$LetterStore.yellow[$TileStore.row][$TileStore.index] = key;
-		}
-	};
-
-	const setGrey = () => {
-		grey = !grey;
-
-		if (grey) {
-			yellow = false;
-			green = false;
-
-			$LetterStore.grey = [...$LetterStore.grey, key];
-			clearGreen();
-			clearYellow();
-		} else {
-			$LetterStore.grey = $LetterStore.grey.filter((item) => item != key);
-		}
-	};
-
-	const clearGreen = () => {
-		$LetterStore.green.map((v) => (v === key ? undefined : v));
-	};
-
-	const clearYellow = () => {
-		for (let i = 0; i < $LetterStore.yellow.length; i++) {
-			$LetterStore.yellow[i] = $LetterStore.yellow[i].map((v) => (v === key ? undefined : v));
 		}
 	};
 </script>

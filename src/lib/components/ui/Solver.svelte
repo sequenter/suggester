@@ -1,28 +1,23 @@
 <script lang="ts">
 	import type { Char, CharArr } from '$constants/types';
-	import { WORDS } from '$constants/words';
 	import { LetterStore } from '$lib/stores/letter.store';
+	import { WORDS } from '$constants/words';
 
 	let solved: string[] = [];
 
-	const solve = () => {
+	export const solve = () => {
 		const grey = $LetterStore.grey;
 		const green = $LetterStore.green;
 		const yellow = $LetterStore.yellow;
 
 		solved = yellowPass(greenPass(greyPass(WORDS, grey), green), yellow);
-		console.log(solved);
 	};
 
 	const greyPass = (words: string[], grey: Char[]) => {
-		const flat = grey.flat().filter((val) => val !== undefined);
-
-		return flat.length
-			? words.filter((word) => {
-					const letters = word.split('') as Char[];
-					return !grey.some((val) => letters.includes(val));
-				})
-			: words;
+		return words.filter((word) => {
+			const letters = word.split('') as Char[];
+			return !grey.some((val) => letters.includes(val));
+		});
 	};
 
 	const greenPass = (words: string[], green: CharArr) => {
@@ -69,23 +64,15 @@
 	};
 </script>
 
-<aside class="w-96 bg-slate-200 h-screen">
-	<div class="flex flex-col items-center h-full">
-		<div class="grow overflow-y-scroll">
-			<ul class="flex flex-wrap p-5 list-none gap-2">
-				{#each solved as word}
-					<li class="text-md px-2 py-1 rounded-lg bg-slate-600 text-white">
-						{word}
-					</li>
-				{/each}
-			</ul>
-		</div>
-		<hr class="h-px my-2 bg-slate-800 border-0" />
-		<span class="text-md font-bold my-3">Found {solved.length} words</span>
-		<button
-			type="button"
-			class="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 font-medium rounded-lg text-sm px-5 py-2.5 mb-5 text-center"
-			on:click={solve}>SEARCH</button
-		>
-	</div>
-</aside>
+<div class="flex flex-col items-center w-full select-none">
+	{#if solved.length > 0}
+		<h3 class="text-sm font-bold">FOUND {solved.length} WORD{solved.length > 1 ? 'S' : ''}</h3>
+	{/if}
+	<ul class="flex flex-wrap justify-center px-5 py-3 list-none gap-2">
+		{#each solved as word}
+			<li class="text-md px-2 py-1 rounded-lg bg-slate-600 text-white">
+				{word}
+			</li>
+		{/each}
+	</ul>
+</div>

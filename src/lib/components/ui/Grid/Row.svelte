@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { TileType } from '$constants/types';
 	import { Tile } from '$lib/components';
+	import type { TileType } from '$constants/types';
 
 	export let row = 0;
 	export let type: TileType;

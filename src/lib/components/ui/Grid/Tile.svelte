@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { Char, TileType } from '$constants/types';
-	import { clsx } from 'clsx';
 	import { LetterStore, TileStore } from '$lib/stores/letter.store';
+	import { clsx } from 'clsx';
 	import { onMount } from 'svelte';
 
 	export let index: number;
 	export let row: number;
 	export let type: TileType;
 
-	let isActive = false;
+	let isActive: boolean;
 	let container: HTMLButtonElement;
 	let letter: Char | undefined = undefined;
 
@@ -41,7 +41,7 @@
 
 <button
 	class={clsx(
-		'text-center h-16 w-16 text-4xl bg-slate-200 rounded-lg border-4',
+		'text-center h-14 w-14 text-4xl bg-slate-200 rounded-lg border-4',
 		isActive && 'border-slate-500'
 	)}
 	bind:this={container}
